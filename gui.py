@@ -36,7 +36,7 @@ class MyWindow:
         self.widget.pack()
         """
 
-        self.image1 = Image.open("splash-removebg-preview.png")
+        self.image1 = Image.open("./res/splash-removebg-preview.png")
         newsize = (60, 60)
         self.image1 = self.image1.resize(newsize)
         self.test = ImageTk.PhotoImage(self.image1)
@@ -93,9 +93,6 @@ class MyWindow:
         self.infomsg=Label(window, text="Idling...", fg='yellow', bg='black', font=("Segoe UI Symbol", 8))
         self.infomsg.place(x=self.GENERAL_X + 5,
                            y=self.SECTION3_Y + 160)
-
-
-
 
 
     def click_btn01(self):
@@ -161,7 +158,7 @@ class MyWindow:
 
 window=Tk()
 MyWindow(window)
-window.iconbitmap("splash-removebg-preview.ico")
+window.iconbitmap("./res/splash-removebg-preview.ico")
 window.title('QT saver')
 window.geometry("300x530+10+10")
 window['background']='#000000'
@@ -169,3 +166,6 @@ window.resizable(False, False)
 
 
 window.mainloop()
+
+
+#pyinstaller --onefile --noconsole --icon=./res/splash-removebg-preview.ico gui.py
