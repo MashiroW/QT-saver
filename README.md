@@ -1,9 +1,8 @@
 # QT-saver
-
-## Project Setup
-### Descripiton
+## Description
 Instagram saving script.
 
+## Project Setup
 ### How to install the dependencies
 
 In your root folder, do:
