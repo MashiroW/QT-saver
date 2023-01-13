@@ -4,19 +4,22 @@ import requests
 import json
 import os
 
+#Relative path
+dirname = os.path.dirname(__file__)
+
 # Application configuration
 app_config = ConfigParser()
-app_config.read("config.ini")
+app_config.read(os.path.join(dirname, "./config.ini"))
 SYSTEM_SECTION_APP    = app_config.sections()[0]
 SAVEPATH              = str(app_config.get(SYSTEM_SECTION_APP, "SAVEPATH"))
 
 def getURL(id = "None"):
 
     if id == "None":
-        ACCOUNT_ID            = str(app_config.get(SYSTEM_SECTION_APP, "USERID"))
+        ACCOUNT_ID    = str(app_config.get(SYSTEM_SECTION_APP, "USERID"))
 
     else:
-        ACCOUNT_ID = id
+        ACCOUNT_ID    = id
 
     URL = "https://www.instagram.com/graphql/query/?query_hash=de8017ee0a7c9c45ec4260733d81ea31&variables=%7B%22reel_ids%22%3A%5B%22{0}%22%5D%2C%22tag_names%22%3A%5B%5D%2C%22location_ids%22%3A%5B%5D%2C%22highlight_reel_ids%22%3A%5B%5D%2C%22precomposed_overlay%22%3Afalse%2C%22show_story_viewer_list%22%3Atrue%2C%22story_viewer_fetch_count%22%3A50%2C%22story_viewer_cursor%22%3A%22%22%7D".format(ACCOUNT_ID)
 
@@ -41,13 +44,13 @@ def parser():
 
         # - If video
         if src_dict["data"]["reels_media"][0]["items"][element_idx]["is_video"] == True:
-            print("ELEMENT #{} (VID):".format(element_idx+1))
+            print("Element #{} (VID):".format(element_idx+1))
             url = src_dict["data"]["reels_media"][0]["items"][element_idx]["video_resources"][0]["src"]
             count_vids +=1
 
         # - If picture
         else:
-            print("ELEMENT #{} (PIC):".format(element_idx+1))
+            print("Element #{} (PIC):".format(element_idx+1))
             url = src_dict["data"]["reels_media"][0]["items"][element_idx]["display_url"]   
             count_pics +=1      
 
@@ -56,28 +59,44 @@ def parser():
 
     return urls, count_pics, count_vids
 
-def saver(url):
-    response = requests.get(url)
+def saver(urls):
 
-    if ".mp4" in url:
-        type = ".mp4"
-    else:
-        type = ".jpg"
+    for url in urls:
+        response = requests.get(url)
 
-    filename = SAVEPATH + "/" + url.split(type)[0].split("/")[-1] + type
-    open(filename, "wb").write(response.content)
+        if ".mp4" in url:
+            type = ".mp4"
+        else:
+            type = ".jpg"
+
+        print(SAVEPATH)
+        if SAVEPATH[0] == ".":
+            try:
+                os.makedirs(dirname + SAVEPATH[1:])
+            except FileExistsError:
+                # directory already exists
+                pass
+
+            filename = dirname + SAVEPATH[1:] + "/" + url.split(type)[0].split("/")[-1] + type
+            print("1 Saving to ", filename)
+            filename = filename.replace("\\", '//')
+
+        else:
+            try:
+                os.makedirs(SAVEPATH)
+            except FileExistsError:
+                # directory already exists
+                pass
+
+
+            filename = SAVEPATH + "/" + url.split(type)[0].split("/")[-1] + type
+
+        print("2 Saving to ", filename)
+        open(filename, "wb").write(response.content)
 
 def get_content():
     urls, _, _, = parser()
-
-    try:
-        os.makedirs(SAVEPATH)
-    except FileExistsError:
-        # directory already exists
-        pass
-
-    for url in urls:
-        saver(url)
+    saver(urls)
 
 if __name__ == "__main__":
     get_content()

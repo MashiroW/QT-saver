@@ -1,7 +1,8 @@
 from QT_saver import *
+import traceback
+from crash import *
 from tkinter import *
 from PIL import ImageTk, Image
-import webbrowser
 import pyperclip
 import os
 
@@ -27,16 +28,7 @@ class MyWindow:
                            y=self.SECTION3_Y + 185)
 
         # - QT PIC
-        """
-        self.widget = Label(window, compound='bottom')
-        self.widget.place(x=self.GENERAL_X,
-                          y=self.SECTION3_Y + 160)
-        self.widget.lenna_image_png = PhotoImage(file="splash-removebg-preview.png")
-        self.widget['image'] = self.widget.lenna_image_png
-        self.widget.pack()
-        """
-
-        self.image1 = Image.open("./res/splash-removebg-preview.png")
+        self.image1 = Image.open(os.path.join(dirname,"./res/splash-removebg-preview.png"))
         newsize = (60, 60)
         self.image1 = self.image1.resize(newsize)
         self.test = ImageTk.PhotoImage(self.image1)
@@ -139,33 +131,37 @@ class MyWindow:
         self.section3_title["text"]="STEP 3 - COMPLETE"
         # - ---
 
-        self.infomsg["text"]="Processing..."
-        Tk.update(window)
-
-        urls, count_pics, count_vids, = parser()
-
         try:
-            os.makedirs(SAVEPATH)
-        except FileExistsError:
-            # directory already exists
-            pass
+            self.infomsg["text"]="Processing (the window might freeze)..."
+            Tk.update(window)
 
-        for url in urls:
-            saver(url)
+            urls, count_pics, count_vids, = parser()
+            saver(urls)
 
-        self.infomsg["text"]="Done. {0} pics and {1} vids have successfully\nbeen saved.".format(count_pics, count_vids)
+            self.infomsg["text"]="Done. {0} pics and {1} vids have successfully\nbeen saved.".format(count_pics, count_vids)
 
-
-window=Tk()
-MyWindow(window)
-window.iconbitmap("./res/splash-removebg-preview.ico")
-window.title('QT saver')
-window.geometry("300x530+10+10")
-window['background']='#000000'
-window.resizable(False, False) 
+        except Exception as e:
+            error_log(traceback.format_exc())
 
 
-window.mainloop()
+if __name__ == "__main__":
+
+    try:
+        #Relative path
+        dirname = os.path.dirname(__file__)
+
+        window=Tk()
+        MyWindow(window)
+        window.iconbitmap(os.path.join(dirname, "./res/splash-removebg-preview.ico"))
+        window.title('QT saver')
+        window.geometry("300x530+10+10")
+        window['background']='#000000'
+        window.resizable(False, False) 
+
+        window.mainloop()
+    except Exception as e:
+        error_log(e)
 
 
-#pyinstaller --onefile --noconsole --icon=./res/splash-removebg-preview.ico gui.py
+
+    #pyinstaller --onefile --noconsole --icon=./res/splash-removebg-preview.ico gui.py
