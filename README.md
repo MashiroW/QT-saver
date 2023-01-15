@@ -1,6 +1,9 @@
 # QT-saver
 ## Description
-Instagram saving script.
+This script is used to save someone's stories on Instagram.
+It can save EVERY story (public&private) you have access to with your account.
+This script DOESN'T USE your credentials.
+You will need to have your Instagram account logged in your usual browser.
 
 ## Project Setup
 
