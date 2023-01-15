@@ -3,6 +3,13 @@
 Instagram saving script.
 
 ## Project Setup
+
+### How to generate a requirements.txt file
+
+In your root folder, do:
+
+  - `python -m pipreqs.pipreqs . --force`
+
 ### How to install the dependencies
 
 In your root folder, do:
@@ -11,9 +18,3 @@ In your root folder, do:
   - `pip install pipreqs`
   - `pip install -r requirements.txt`
 
-
-### How to generate a requirements.txt file
-
-In your root folder, do:
-
-  - `python -m pipreqs.pipreqs . --force`
