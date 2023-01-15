@@ -7,6 +7,8 @@
 
 ## Project Setup
 
+If you just want a .exe to run the script, refer to the Releases section, this page concerns the source code only.
+
 ### How to generate a requirements.txt file
 
 In your root folder, do:
