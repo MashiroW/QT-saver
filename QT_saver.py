@@ -64,6 +64,12 @@ def deleteUserByName(userName):
             return 0
     return 1
 
+def getOutputPath():
+    pass
+
+def editOutputPath():
+    pass
+
 def getURL(id = "None"):
 
     if id == "None":
