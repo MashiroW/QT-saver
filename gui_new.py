@@ -1,13 +1,17 @@
 import tkinter
-
 import customtkinter
 import os
 from PIL import Image
+from QT_saver import *
 
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+
+        # - Variables
+        self.userlist         = sorted(getUsers().values())
+        self.userlistToString = self.dictToString(getUsers)
 
         self.title("QTSaver")
         self.geometry("850x600")
@@ -17,21 +21,22 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(1, weight=1)
 
         # load images with light and dark mode image
-        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../test/manual_integration_tests/test_images")
-        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "./my_files/splash-removebg-preview.png")), size=(28, 28))
-        self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "large_test_image.png")), size=(500, 150))
-        self.image_icon_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "image_icon_light.png")), size=(20, 20))
+        #image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../test/manual_integration_tests/test_images")
+        image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "")
+        self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "./res/splash-removebg-preview.png")), size=(28, 28))
+        self.large_test_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "./res/large_test_image.png")), size=(500, 150))
+        self.image_icon_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "./res/image_icon_light.png")), size=(20, 20))
 
-        self.home_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./my_files/home_dark.png")),
-                                                 dark_image=Image.open(os.path.join(image_path, "./my_files/home_light.png")), size=(20, 20))
-        self.download = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./my_files/download_light.png")),
-                                                 dark_image=Image.open(os.path.join(image_path, "./my_files/download_dark.png")), size=(20, 20))
-        self.settings = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./my_files/settings_light.png")),
-                                                     dark_image=Image.open(os.path.join(image_path, "./my_files/settings_dark.png")), size=(20, 15))
-        self.copy = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./my_files/copy_light.png")),
-                                                     dark_image=Image.open(os.path.join(image_path, "./my_files/copy_dark.png")), size=(20, 20))
-        self.add_user = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./my_files/add_user_dark.png")),
-                                                     dark_image=Image.open(os.path.join(image_path, "./my_files/add_user_light.png")), size=(20, 20))                                                    
+        self.home_image = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./res/home_dark.png")),
+                                                 dark_image=Image.open(os.path.join(image_path, "./res/home_light.png")), size=(20, 20))
+        self.download = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./res/download_light.png")),
+                                                 dark_image=Image.open(os.path.join(image_path, "./res/download_dark.png")), size=(20, 20))
+        self.settings = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./res/settings_light.png")),
+                                                     dark_image=Image.open(os.path.join(image_path, "./res/settings_dark.png")), size=(20, 15))
+        self.copy = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./res/copy_light.png")),
+                                                     dark_image=Image.open(os.path.join(image_path, "./res/copy_dark.png")), size=(20, 20))
+        self.add_user = customtkinter.CTkImage(light_image=Image.open(os.path.join(image_path, "./res/add_user_dark.png")),
+                                                     dark_image=Image.open(os.path.join(image_path, "./res/add_user_light.png")), size=(20, 20))                                                    
 
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
@@ -78,7 +83,7 @@ class App(customtkinter.CTk):
         self.home_frame_button_4.grid(row=4, column=0, padx=20, pady=10)
 
         # DOWNLOAD FRAME
-        # STEP 1 - [TAB 2]
+        # STEP 1 - [TAB 1]
         self.download_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.download_frame.grid_columnconfigure(0, weight=1)
 
@@ -166,7 +171,7 @@ class App(customtkinter.CTk):
         self.progressbar_1 = customtkinter.CTkProgressBar(self.box2)
         self.progressbar_1.grid(row=3, column=0, padx=(20, 10), pady=(10, 10), sticky="ew")
 
-        # SETTINGS FRAME
+        # FRAME - SETTINGS
         self.settings_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.settings_frame.grid_columnconfigure((0,1), weight=1)
 
@@ -176,12 +181,19 @@ class App(customtkinter.CTk):
         self.txt_settings.grid(row=0, column=1, padx=(20, 300), pady=(20, 0)) 
         """
 
+        # create textbox
+        """
+        self.settings_textbox = customtkinter.CTkTextbox(self.settings_frame, width=250)
+        self.settings_textbox.grid(row=0, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.settings_textbox.insert("0.5", "@mysupername | 18279849\n" * 20)
+        """
+
         self.settings_btn1 = customtkinter.CTkButton(self.settings_frame,
                                                         text="ADD USER", 
                                                         image=self.add_user,
                                                         hover_color="orange",
                                                         compound="top",
-                                                        command=self.button_presssed,
+                                                        command=self.settings_add_user_button_event,
                                                         width=300,
                                                         height=100)
         self.settings_btn1.grid(row=1, column=0, padx=(10,0), pady=(20, 20))  
@@ -191,7 +203,7 @@ class App(customtkinter.CTk):
                                                         image=self.add_user,
                                                         hover_color="orange",
                                                         compound="top",
-                                                        command=self.button_presssed,
+                                                        command=self.settings_delete_user_button_event,
                                                         width=300,
                                                         height=100)
         self.settings_btn2.grid(row=1, column=1, padx=(0,10), pady=(20, 20)) 
@@ -216,12 +228,73 @@ class App(customtkinter.CTk):
                                                         height=100)
         self.settings_btn3.grid(row=2, column=1, padx=(0,10), pady=(20, 20)) 
 
+        # TICKABLE BUTTONS
+        """
+        self.settings_checkbox_1 = customtkinter.CTkCheckBox(master=self.settings_frame)
+        self.settings_checkbox_1.grid(row=3, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
 
-        self.settings_switch_1 = customtkinter.CTkSwitch(self.box2, command=lambda: print("switch 1 toggle"), text="Create one folder per ID")
-        self.settings_switch_1.grid(row=0, column=0, padx=(50,225), pady=(20, 20))
+        self.settings_checkbox_2 = customtkinter.CTkCheckBox(master=self.settings_frame)
+        self.settings_checkbox_2.grid(row=3, column=1, padx=(10, 10), pady=(20, 20), sticky="n")
+        """
 
-        self.settings_switch_2 = customtkinter.CTkSwitch(self.box2, command=lambda: print("switch 2 toggle"), text="Create one folder per day")
-        self.settings_switch_2.grid(row=0, column=0, padx=(225,50), pady=(20, 20))      
+        # SWITCHES BUTTONS        
+        self.settings_switch_1 = customtkinter.CTkSwitch(self.settings_frame, command=lambda: print("switch 1 toggle"), text="Create one folder per ID")
+        self.settings_switch_1.grid(row=3, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
+
+        self.settings_switch_2 = customtkinter.CTkSwitch(self.settings_frame, command=lambda: print("switch 2 toggle"), text="Create one folder per day")
+        self.settings_switch_2.grid(row=3, column=1, padx=(10, 10), pady=(20, 20), sticky="n")   
+        
+        # FRAME - SETTINGS > ADD_USER
+        self.settings_add_user_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.settings_add_user_frame.grid_columnconfigure(0, weight=1)
+
+        self.settings_add_user_textbox = customtkinter.CTkTextbox(self.settings_add_user_frame, width=250)
+        self.settings_add_user_textbox.grid(row=0, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
+        self.settings_add_user_textbox.insert("0.5", "@mysupername | 18279849\n" * 20)
+        self.settings_add_user_textbox.configure(state=tkinter.DISABLED)
+
+        self.settings_add_user_id_entry = customtkinter.CTkEntry(self.settings_add_user_frame, placeholder_text="ACC ID (ex: 16771389)", width=180)
+        self.settings_add_user_id_entry.grid(row=1, column=0, columnspan=2, padx=(10, 230), pady=(20, 20))
+
+        self.settings_add_user_name_entry = customtkinter.CTkEntry(self.settings_add_user_frame, placeholder_text="ACC name (ex: @nrg_mash)", width=180)
+        self.settings_add_user_name_entry.grid(row=1, column=0, columnspan=2, padx=(230, 10), pady=(20, 20))
+
+        self.settings_add_user_button = customtkinter.CTkButton(self.settings_add_user_frame,
+                                                        text="ADD USER", 
+                                                        image=self.add_user,
+                                                        fg_color="green",
+                                                        hover_color="orange",
+                                                        compound="top",
+                                                        command=self.settings_add_user_add_button_event,
+                                                        width=200,
+                                                        height=70)
+        self.settings_add_user_button.grid(row=2, column=0, padx=(10,0), pady=(0, 20))
+
+        # FRAME - SETTINGS > DELETE_USER
+        self.settings_delete_user_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.settings_delete_user_frame.grid_columnconfigure(0, weight=1)
+
+        self.settings_delete_user_textbox = customtkinter.CTkTextbox(self.settings_delete_user_frame, width=250)
+        self.settings_delete_user_textbox.grid(row=0, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
+        self.settings_delete_user_textbox.insert("0.5", self.userlistToString)
+        self.settings_delete_user_textbox.configure(state=tkinter.DISABLED)
+
+        self.settings_delete_user_option_menu = customtkinter.CTkOptionMenu(self.settings_delete_user_frame,
+                                                        dynamic_resizing=False,
+                                                        values=self.userlist)
+        self.settings_delete_user_option_menu.grid(row=1, column=0, padx=(10, 10), pady=(20, 20))
+
+        self.settings_delete_user_button = customtkinter.CTkButton(self.settings_delete_user_frame,
+                                                        text="DELETE USER", 
+                                                        image=self.add_user,
+                                                        fg_color="red",
+                                                        hover_color="orange",
+                                                        compound="top",
+                                                        command=self.settings_delete_user_delete_button_event,
+                                                        width=200,
+                                                        height=70)
+        self.settings_delete_user_button.grid(row=2, column=0, padx=(10,0), pady=(0, 20))
+
 
 
         # DEFAULT FRAME SELECTED ON STARTUP
@@ -247,18 +320,61 @@ class App(customtkinter.CTk):
         else:
             self.settings_frame.grid_forget()
 
+        if name == "settings_add_user":
+            self.settings_add_user_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.settings_add_user_frame.grid_forget()
+
+        if name == "settings_delete_user":
+            self.settings_delete_user_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.settings_delete_user_frame.grid_forget()
+
         # set colors back to the red background
         self.step1_txt.configure(text="STEP 1 - NOT COMPLETE", bg_color="red")
         self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
 
+
+    # - Frame Transitioning
     def home_button_event(self):
         self.select_frame_by_name("home")
 
     def download_button_event(self):
         self.select_frame_by_name("download")
 
+    # - Settings - page
     def settings_button_event(self):
         self.select_frame_by_name("settings")
+
+    def settings_add_user_button_event(self):
+        self.select_frame_by_name("settings_add_user")
+
+    def settings_delete_user_button_event(self):
+        self.select_frame_by_name("settings_delete_user")
+
+    # - Settings > add_user - page
+    def settings_add_user_add_button_event(self):
+        name = self.settings_add_user_name_entry.get()
+        id   = self.settings_add_user_id_entry.get()
+
+        print("SETTINGS>ADD_USER>ADD BUTTON PRESSED")
+        print(id, name)
+
+    # - Settings > delete_user - page
+    def settings_delete_user_delete_button_event(self):
+        self.userlist = sorted(getUsers().values())
+        id = self.settings_delete_user_option_menu.get()
+
+        print("SETTINGS>DELETE_USER>DELETE BUTTON PRESSED")
+        print(id)
+
+    # -------------------------------
+
+    def dictToString(self, my_dict):
+        final_string = ""
+        for key, value in my_dict.items():
+            final_string = final_string + "{0} | {1}\n".format(key, value)
+        return final_string
 
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
