@@ -20,7 +20,7 @@ def getUsers():
 
 def addUser(userId, userName):
     savedUsers = getUsers()
-    if userId in savedUsers:
+    if userId in savedUsers or userName in savedUsers.values():
         return 1
 
     else:
@@ -33,7 +33,7 @@ def addUser(userId, userName):
             app_config.write(configfile)
         return 0
 
-def deleteUser(userId):
+def deleteUserById(userId):
     savedUsers = getUsers()
     if userId in savedUsers:
         savedUsers.pop(userId)
@@ -48,6 +48,21 @@ def deleteUser(userId):
 
     else:
         return 1
+
+def deleteUserByName(userName):
+    savedUsers = getUsers()
+    for key, value in savedUsers.items():
+        if value == userName:
+            savedUsers.pop(key)
+            savedUsers = json.dumps(ast.literal_eval(str(savedUsers)))
+
+            app_config.set(SYSTEM_SECTION_APP, 'savedusers', str(savedUsers))
+
+            with open('config.ini', 'w') as configfile:
+                app_config.write(configfile)
+
+            return 0
+    return 1
 
 def getURL(id = "None"):
 

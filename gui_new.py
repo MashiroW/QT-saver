@@ -11,7 +11,7 @@ class App(customtkinter.CTk):
 
         # - Variables
         self.userlist         = sorted(getUsers().values())
-        self.userlistToString = self.dictToString(getUsers)
+        self.userlistToString = self.dictToString(getUsers())
 
         self.title("QTSaver")
         self.geometry("850x600")
@@ -250,7 +250,7 @@ class App(customtkinter.CTk):
 
         self.settings_add_user_textbox = customtkinter.CTkTextbox(self.settings_add_user_frame, width=250)
         self.settings_add_user_textbox.grid(row=0, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
-        self.settings_add_user_textbox.insert("0.5", "@mysupername | 18279849\n" * 20)
+        self.settings_add_user_textbox.insert("0.0", self.userlistToString)
         self.settings_add_user_textbox.configure(state=tkinter.DISABLED)
 
         self.settings_add_user_id_entry = customtkinter.CTkEntry(self.settings_add_user_frame, placeholder_text="ACC ID (ex: 16771389)", width=180)
@@ -276,12 +276,12 @@ class App(customtkinter.CTk):
 
         self.settings_delete_user_textbox = customtkinter.CTkTextbox(self.settings_delete_user_frame, width=250)
         self.settings_delete_user_textbox.grid(row=0, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
-        self.settings_delete_user_textbox.insert("0.5", self.userlistToString)
+        self.settings_delete_user_textbox.insert("0.0", self.userlistToString)
         self.settings_delete_user_textbox.configure(state=tkinter.DISABLED)
 
         self.settings_delete_user_option_menu = customtkinter.CTkOptionMenu(self.settings_delete_user_frame,
                                                         dynamic_resizing=False,
-                                                        values=self.userlist)
+                                                        values=sorted(getUsers().values()))
         self.settings_delete_user_option_menu.grid(row=1, column=0, padx=(10, 10), pady=(20, 20))
 
         self.settings_delete_user_button = customtkinter.CTkButton(self.settings_delete_user_frame,
@@ -356,22 +356,44 @@ class App(customtkinter.CTk):
     def settings_add_user_add_button_event(self):
         name = self.settings_add_user_name_entry.get()
         id   = self.settings_add_user_id_entry.get()
-
-        print("SETTINGS>ADD_USER>ADD BUTTON PRESSED")
-        print(id, name)
+        addUser(id, name)
+        self.displayDBUpdate()
 
     # - Settings > delete_user - page
     def settings_delete_user_delete_button_event(self):
-        self.userlist = sorted(getUsers().values())
-        id = self.settings_delete_user_option_menu.get()
+        username = self.settings_delete_user_option_menu.get()
+        deleteUserByName(username)
+        self.displayDBUpdate()
 
-        print("SETTINGS>DELETE_USER>DELETE BUTTON PRESSED")
-        print(id)
+
+        self.settings_delete_user_option_menu
 
     # -------------------------------
 
+    def displayDBUpdate(self):
+        # Settings > add_user
+        # ---------> Textbox
+        self.settings_add_user_textbox.configure(state=tkinter.NORMAL)
+        self.settings_add_user_textbox.delete("0.0", "end")
+        self.settings_add_user_textbox.insert("0.0", self.dictToString(getUsers()))
+        self.settings_add_user_textbox.configure(state=tkinter.DISABLED)
+
+        # Settings > delete_user
+        # ---------> Textbox
+        self.settings_delete_user_textbox.configure(state=tkinter.NORMAL)
+        self.settings_delete_user_textbox.delete("0.0", "end")
+        self.settings_delete_user_textbox.insert("0.0", self.dictToString(getUsers()))
+        self.settings_delete_user_textbox.configure(state=tkinter.DISABLED)
+
+        # ---------> Droplist
+        self.settings_delete_user_option_menu.configure(values=sorted(getUsers().values()))
+
     def dictToString(self, my_dict):
+        """
+        This function returns the list of users and their IDs used in the ADD_USER/DELETE_USER section
+        """
         final_string = ""
+        print(my_dict, type(my_dict))
         for key, value in my_dict.items():
             final_string = final_string + "{0} | {1}\n".format(key, value)
         return final_string
