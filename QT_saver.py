@@ -3,6 +3,8 @@ import pyperclip
 import requests
 import json
 import os
+import ast
+
 
 #Relative path
 dirname = os.path.dirname(__file__)
@@ -11,12 +13,46 @@ dirname = os.path.dirname(__file__)
 app_config = ConfigParser()
 app_config.read(os.path.join(dirname, "./config.ini"))
 SYSTEM_SECTION_APP    = app_config.sections()[0]
-SAVEPATH              = str(app_config.get(SYSTEM_SECTION_APP, "SAVEPATH"))
+SAVEPATH              = str(app_config.get(SYSTEM_SECTION_APP, 'savepath'))
+
+def getUsers():
+    return json.loads(str(app_config.get(SYSTEM_SECTION_APP, 'savedusers')))
+
+def addUser(userId, userName):
+    savedUsers = getUsers()
+    if userId in savedUsers:
+        return 1
+
+    else:
+        savedUsers[userId] = userName
+        savedUsers         = json.dumps(ast.literal_eval(str(savedUsers)))
+
+        app_config.set(SYSTEM_SECTION_APP, 'savedusers', str(savedUsers))
+
+        with open('config.ini', 'w') as configfile:
+            app_config.write(configfile)
+        return 0
+
+def deleteUser(userId):
+    savedUsers = getUsers()
+    if userId in savedUsers:
+        savedUsers.pop(userId)
+        savedUsers = json.dumps(ast.literal_eval(str(savedUsers)))
+
+        app_config.set(SYSTEM_SECTION_APP, 'savedusers', str(savedUsers))
+
+        with open('config.ini', 'w') as configfile:
+            app_config.write(configfile)
+
+        return 0
+
+    else:
+        return 1
 
 def getURL(id = "None"):
 
     if id == "None":
-        ACCOUNT_ID    = str(app_config.get(SYSTEM_SECTION_APP, "USERID"))
+        ACCOUNT_ID    = str(app_config.get(SYSTEM_SECTION_APP, "userid"))
 
     else:
         ACCOUNT_ID    = id
