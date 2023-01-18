@@ -4,6 +4,7 @@ import requests
 import json
 import os
 import ast
+from crash import *
 from tkinter.filedialog import askdirectory
 
 
@@ -68,11 +69,11 @@ def deleteUserByName(userName):
 def getOutputPath():
     path = str(app_config.get(SYSTEM_SECTION_APP, 'savepath'))
 
-    if SAVEPATH[0] == ".":
-        return dirname + path[1:].replace("/", "\\")
+    if path[0] == ".":
+        return dirname[0].capitalize() + dirname[1:] + path[1:].replace("/", "\\")
 
     else:
-        return path
+        return path.replace("/", "\\")
 
 def setOutputPath():
     savepath = askdirectory()
@@ -82,9 +83,11 @@ def setOutputPath():
         with open('config.ini', 'w') as configfile:
             app_config.write(configfile)
 
-    
-
-
+def openOuputPath():
+    try:
+        os.startfile(getOutputPath())
+    except:
+        msgbox(msg="Your folder doesn't exist... yet ?", title="Error", windowtype=0)
 
 def getURL(id = "None"):
 
