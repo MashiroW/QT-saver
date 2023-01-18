@@ -4,6 +4,7 @@ import requests
 import json
 import os
 import ast
+from tkinter.filedialog import askdirectory
 
 
 #Relative path
@@ -65,10 +66,25 @@ def deleteUserByName(userName):
     return 1
 
 def getOutputPath():
-    pass
+    path = str(app_config.get(SYSTEM_SECTION_APP, 'savepath'))
 
-def editOutputPath():
-    pass
+    if SAVEPATH[0] == ".":
+        return dirname + path[1:].replace("/", "\\")
+
+    else:
+        return path
+
+def setOutputPath():
+    savepath = askdirectory()
+    if savepath != "":
+        app_config.set(SYSTEM_SECTION_APP, 'savepath', str(savepath))
+
+        with open('config.ini', 'w') as configfile:
+            app_config.write(configfile)
+
+    
+
+
 
 def getURL(id = "None"):
 
