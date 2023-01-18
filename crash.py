@@ -2,11 +2,11 @@ import os
 import ctypes
 import pyperclip
 
-def msgox(msg, title="Error"):
+def msgbox(msg, title="Error", auto_copy=1, windowtype=1):
     MessageBox = ctypes.windll.user32.MessageBoxW
-    result = MessageBox(None, msg, title, 1)
+    result = MessageBox(None, msg, title, windowtype)
 
-    if result == 1:
+    if result == 1 and auto_copy == 1:
         pyperclip.copy(msg)
 
 
@@ -34,7 +34,7 @@ def error_log(exception):
 
     dirname = os.path.dirname(__file__)
     message = "{0}\n{1}\n[FILES]\n{2}\n[EXCEPTION]\n{3}".format(start, delimiter, list_files(dirname), exception)
-    msgox(message, title)
+    msgbox(message, title)
 
 if __name__ == "__main__":
     error_log("Traceback most recent call last:File")

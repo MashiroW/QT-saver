@@ -1,3 +1,3 @@
 from QT_saver import *
 
-print(setOutputPath())
+print(getOutputPath())

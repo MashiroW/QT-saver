@@ -174,6 +174,7 @@ class App(customtkinter.CTk):
         # FRAME - SETTINGS
         self.settings_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.settings_frame.grid_columnconfigure((0,1), weight=1)
+        #self.settings_frame.grid_rowconfigure((3,0), weight=3)
 
         """
         self.txt_settings = "EACH OF THESE SETTINGS CAN BE\nDIRECTLY EDITED FROM THE .INI FILE"
@@ -213,7 +214,7 @@ class App(customtkinter.CTk):
                                                         image=self.add_user,
                                                         hover_color="orange",
                                                         compound="top",
-                                                        command=self.button_presssed,
+                                                        command=self.settings_update_output_button_event,
                                                         width=300,
                                                         height=100)
         self.settings_btn3.grid(row=2, column=0, padx=(10,0), pady=(20, 20)) 
@@ -223,7 +224,7 @@ class App(customtkinter.CTk):
                                                         image=self.add_user,
                                                         hover_color="orange",
                                                         compound="top",
-                                                        command=self.button_presssed,
+                                                        command=self.settings_open_output_button_event,
                                                         width=300,
                                                         height=100)
         self.settings_btn3.grid(row=2, column=1, padx=(0,10), pady=(20, 20)) 
@@ -237,12 +238,18 @@ class App(customtkinter.CTk):
         self.settings_checkbox_2.grid(row=3, column=1, padx=(10, 10), pady=(20, 20), sticky="n")
         """
 
+        # PATHFIELD
+        self.settings_pathield_textbox = customtkinter.CTkTextbox(self.settings_frame, width=400, height=10)
+        self.settings_pathield_textbox.grid(row=3, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew", columnspan=2)   
+        self.settings_pathield_textbox.insert("0.0", getOutputPath())
+        self.settings_pathield_textbox.configure(state=tkinter.DISABLED)     
+
         # SWITCHES BUTTONS        
         self.settings_switch_1 = customtkinter.CTkSwitch(self.settings_frame, command=lambda: print("switch 1 toggle"), text="Create one folder per ID")
-        self.settings_switch_1.grid(row=3, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
+        self.settings_switch_1.grid(row=4, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
 
         self.settings_switch_2 = customtkinter.CTkSwitch(self.settings_frame, command=lambda: print("switch 2 toggle"), text="Create one folder per day")
-        self.settings_switch_2.grid(row=3, column=1, padx=(10, 10), pady=(20, 20), sticky="n")   
+        self.settings_switch_2.grid(row=4, column=1, padx=(10, 10), pady=(20, 20), sticky="n")   
         
         # FRAME - SETTINGS > ADD_USER
         self.settings_add_user_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -335,14 +342,14 @@ class App(customtkinter.CTk):
         self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
 
 
-    # - Frame Transitioning
+    # - Frame Transitioning > Sidebar
     def home_button_event(self):
         self.select_frame_by_name("home")
 
     def download_button_event(self):
         self.select_frame_by_name("download")
 
-    # - Settings - page
+    # - Frame Transitioning > Settings
     def settings_button_event(self):
         self.select_frame_by_name("settings")
 
@@ -351,6 +358,16 @@ class App(customtkinter.CTk):
 
     def settings_delete_user_button_event(self):
         self.select_frame_by_name("settings_delete_user")
+
+    # ------------------------
+
+    # - Settings - page
+    def settings_update_output_button_event(self):
+        setOutputPath()
+        self.displayDBUpdate()
+
+    def settings_open_output_button_event(self):
+        openOuputPath()
 
     # - Settings > add_user - page
     def settings_add_user_add_button_event(self):
@@ -365,12 +382,16 @@ class App(customtkinter.CTk):
         deleteUserByName(username)
         self.displayDBUpdate()
 
-
-        self.settings_delete_user_option_menu
-
     # -------------------------------
 
     def displayDBUpdate(self):
+        # Settings
+        # ---------> Textbox
+        self.settings_pathield_textbox.configure(state=tkinter.NORMAL)
+        self.settings_pathield_textbox.delete("0.0", "end")
+        self.settings_pathield_textbox.insert("0.0", getOutputPath())
+        self.settings_pathield_textbox.configure(state=tkinter.DISABLED)
+
         # Settings > add_user
         # ---------> Textbox
         self.settings_add_user_textbox.configure(state=tkinter.NORMAL)
@@ -393,7 +414,6 @@ class App(customtkinter.CTk):
         This function returns the list of users and their IDs used in the ADD_USER/DELETE_USER section
         """
         final_string = ""
-        print(my_dict, type(my_dict))
         for key, value in my_dict.items():
             final_string = final_string + "{0} | {1}\n".format(key, value)
         return final_string
