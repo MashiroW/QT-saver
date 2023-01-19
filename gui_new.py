@@ -101,10 +101,10 @@ class App(customtkinter.CTk):
         self.download_tabview.tab(tab1_name).grid_columnconfigure(0, weight=1)
         self.download_tabview.tab(tab2_name).grid_columnconfigure(0, weight=1)
 
-        self.id_select = customtkinter.CTkOptionMenu(self.download_tabview.tab(tab1_name),
+        self.download_tab_id_select = customtkinter.CTkOptionMenu(self.download_tabview.tab(tab1_name),
                                                         dynamic_resizing=False,
-                                                        values=sorted(["@misterv", "Value 2", "AValue 2", "Value Long Long Long"]))
-        self.id_select.grid(row=0, column=0, padx=(10, 10), pady=(20, 10))
+                                                        values=sorted(getUsers().values()))
+        self.download_tab_id_select.grid(row=0, column=0, padx=(10, 10), pady=(20, 10))
 
         self.generate_URL_button_dict = customtkinter.CTkButton(self.download_tabview.tab(tab1_name),
                                                         text="Copy URL to clipboard", 
@@ -360,7 +360,14 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("settings_delete_user")
 
     # ------------------------
+    # - Download TAB1 - page
+    def copy_url(self):
+        self.step1_txt.configure(text="STEP 1 - COMPLETE", bg_color="green")
+        self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
 
+        username = self.download_tab_id_select.get()
+        getUrlByName(userName=username)
+        
     # - Settings - page
     def settings_update_output_button_event(self):
         setOutputPath()
@@ -421,10 +428,7 @@ class App(customtkinter.CTk):
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
-    def copy_url(self):
-        print("URL COPIED TO CLIPBOARD")
-        self.step1_txt.configure(text="STEP 1 - COMPLETE", bg_color="green")
-        self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
+
 
     def paste_url(self):
         print("URL PASTED - CODE RUNNING")

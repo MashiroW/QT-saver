@@ -89,6 +89,13 @@ def openOuputPath():
     except:
         msgbox(msg="Your folder doesn't exist... yet ?", title="Error", windowtype=0)
 
+def getUrlByName(userName):
+    savedUsers = getUsers()
+    for key, value in savedUsers.items():
+        if value == userName:
+            pyperclip.copy(getURL(id=key))
+            return getURL(id=key)
+
 def getURL(id = "None"):
 
     if id == "None":
