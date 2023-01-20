@@ -112,7 +112,7 @@ class App(customtkinter.CTk):
                                                         anchor= "bottom",
                                                         hover_color="orange",
                                                         compound="top",
-                                                        command=self.copy_url)
+                                                        command=self.settings_copy_url_tab1)
         self.generate_URL_button_dict.grid(row=0, column=1, padx=(10, 10), pady=(20, 10))  
 
         self.txt1 = "Hint: To save IDs in this\nlist, go to settings"
@@ -124,8 +124,8 @@ class App(customtkinter.CTk):
         self.hint2.grid(row=1, column=1, padx=(10, 10), pady=(0, 0)) 
 
         # STEP 1 - [TAB 2]
-        self.entry = customtkinter.CTkEntry(self.download_tabview.tab(tab2_name), placeholder_text="Target's account ID")
-        self.entry.grid(row=0, column=0, columnspan=2, padx=(10, 10), pady=(20, 20))
+        self.download_id_entry = customtkinter.CTkEntry(self.download_tabview.tab(tab2_name), placeholder_text="Target's account ID")
+        self.download_id_entry.grid(row=0, column=0, columnspan=2, padx=(10, 10), pady=(20, 20))
 
         self.txt3 = "Paste the URL once copied in your browser where you're\nalready logged into Instagram"
         self.hint3 = customtkinter.CTkLabel(self.download_tabview.tab(tab2_name), text=self.txt3, text_color="#fff", width=150, justify="center", anchor="w")
@@ -137,7 +137,7 @@ class App(customtkinter.CTk):
                                                 anchor= "bottom",
                                                 hover_color="orange",
                                                 compound="top",
-                                                command=self.copy_url)
+                                                command=self.settings_copy_url_tab2)
         self.generate_URL_button_string.grid(row=2, column=0, padx=(10, 10), pady=(20, 10))
 
         # - STEP 2
@@ -305,7 +305,7 @@ class App(customtkinter.CTk):
 
 
         # DEFAULT FRAME SELECTED ON STARTUP
-        self.select_frame_by_name("settings")
+        self.select_frame_by_name("download")
 
     def select_frame_by_name(self, name):
         # set button color for selected button
@@ -361,12 +361,22 @@ class App(customtkinter.CTk):
 
     # ------------------------
     # - Download TAB1 - page
-    def copy_url(self):
+    def settings_copy_url_tab1(self):
         self.step1_txt.configure(text="STEP 1 - COMPLETE", bg_color="green")
         self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
 
         username = self.download_tab_id_select.get()
         getUrlByName(userName=username)
+
+    def settings_copy_url_tab2(self):
+        self.step1_txt.configure(text="STEP 1 - COMPLETE", bg_color="green")
+        self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
+
+        id = self.download_id_entry.get()
+        getUrlById(userid=id)
+
+
+
         
     # - Settings - page
     def settings_update_output_button_event(self):
