@@ -3,6 +3,7 @@ import customtkinter
 import os
 from PIL import Image
 from QT_saver import *
+import datetime
 
 
 class App(customtkinter.CTk):
@@ -14,7 +15,8 @@ class App(customtkinter.CTk):
         self.userlistToString = self.dictToString(getUsers())
 
         self.title("QTSaver")
-        self.geometry("850x600")
+        #self.geometry("1000x710")
+        self.geometry("1000x750")
 
         # set grid layout 1x2
         self.grid_rowconfigure(0, weight=1)
@@ -82,7 +84,9 @@ class App(customtkinter.CTk):
         self.home_frame_button_4 = customtkinter.CTkButton(self.home_frame, text="CTkButton", image=self.image_icon_image, compound="bottom", anchor="w")
         self.home_frame_button_4.grid(row=4, column=0, padx=20, pady=10)
 
+        # -----------------
         # DOWNLOAD FRAME
+        # -----------------
         # STEP 1 - [TAB 1]
         self.download_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.download_frame.grid_columnconfigure(0, weight=1)
@@ -112,7 +116,7 @@ class App(customtkinter.CTk):
                                                         anchor= "bottom",
                                                         hover_color="orange",
                                                         compound="top",
-                                                        command=self.settings_copy_url_tab1)
+                                                        command=self.download_copy_url_tab1)
         self.generate_URL_button_dict.grid(row=0, column=1, padx=(10, 10), pady=(20, 10))  
 
         self.txt1 = "Hint: To save IDs in this\nlist, go to settings"
@@ -137,7 +141,7 @@ class App(customtkinter.CTk):
                                                 anchor= "bottom",
                                                 hover_color="orange",
                                                 compound="top",
-                                                command=self.settings_copy_url_tab2)
+                                                command=self.download_copy_url_tab2)
         self.generate_URL_button_string.grid(row=2, column=0, padx=(10, 10), pady=(20, 10))
 
         # - STEP 2
@@ -145,7 +149,7 @@ class App(customtkinter.CTk):
         self.step2_txt.grid(row=3, column=0, padx=(40, 40), pady=(20, 0))  
 
         self.box2 = customtkinter.CTkFrame(self.download_frame)
-        self.box2.grid(row=4, column=0, padx=(40, 40), pady=(20, 20))
+        self.box2.grid(row=4, column=0, padx=(40, 40), pady=(20, 10))
 
         self.switch_1 = customtkinter.CTkSwitch(self.box2, command=lambda: print("switch 1 toggle"), text="Get Pics")
         self.switch_1.grid(row=0, column=0, padx=(50,225), pady=(20, 20))
@@ -165,29 +169,23 @@ class App(customtkinter.CTk):
                                                         anchor= "bottom",
                                                         hover_color="orange",
                                                         compound="top",
-                                                        command=self.paste_url)
+                                                        command=self.download_run)
         self.paste_url_button.grid(row=2, column=0, padx=(10,10), pady=(20, 20))  
 
         self.progressbar_1 = customtkinter.CTkProgressBar(self.box2)
         self.progressbar_1.grid(row=3, column=0, padx=(20, 10), pady=(10, 10), sticky="ew")
+        self.progressbar_1.set(0)  
 
+        self.download_console_textbox = customtkinter.CTkTextbox(self.download_frame, width=400, height=140)
+        self.download_console_textbox.grid(row=5, column=0, padx=(20, 20), pady=(10, 10), sticky="nsew", columnspan=2)   
+        self.download_console_textbox.insert("0.0", "")
+        self.download_console_textbox.configure(state=tkinter.DISABLED) 
+
+        # -----------------
         # FRAME - SETTINGS
+        # -----------------
         self.settings_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.settings_frame.grid_columnconfigure((0,1), weight=1)
-        #self.settings_frame.grid_rowconfigure((3,0), weight=3)
-
-        """
-        self.txt_settings = "EACH OF THESE SETTINGS CAN BE\nDIRECTLY EDITED FROM THE .INI FILE"
-        self.txt_settings = customtkinter.CTkLabel(self.settings_frame, text=self.txt_settings, text_color="red")
-        self.txt_settings.grid(row=0, column=1, padx=(20, 300), pady=(20, 0)) 
-        """
-
-        # create textbox
-        """
-        self.settings_textbox = customtkinter.CTkTextbox(self.settings_frame, width=250)
-        self.settings_textbox.grid(row=0, column=0, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.settings_textbox.insert("0.5", "@mysupername | 18279849\n" * 20)
-        """
 
         self.settings_btn1 = customtkinter.CTkButton(self.settings_frame,
                                                         text="ADD USER", 
@@ -302,8 +300,6 @@ class App(customtkinter.CTk):
                                                         height=70)
         self.settings_delete_user_button.grid(row=2, column=0, padx=(10,0), pady=(0, 20))
 
-
-
         # DEFAULT FRAME SELECTED ON STARTUP
         self.select_frame_by_name("download")
 
@@ -360,24 +356,52 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("settings_delete_user")
 
     # ------------------------
-    # - Download TAB1 - page
-    def settings_copy_url_tab1(self):
+    # - Download - page
+    def download_copy_url_tab1(self):
         self.step1_txt.configure(text="STEP 1 - COMPLETE", bg_color="green")
         self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
 
         username = self.download_tab_id_select.get()
         getUrlByName(userName=username)
 
-    def settings_copy_url_tab2(self):
+    def download_copy_url_tab2(self):
         self.step1_txt.configure(text="STEP 1 - COMPLETE", bg_color="green")
         self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
 
         id = self.download_id_entry.get()
         getUrlById(userid=id)
 
+    def download_run(self):
+        self.step2_txt.configure(text="STEP 2 - COMPLETE", bg_color="green")
 
+        data = getContentDict()
+        idx = 0
+        for url, type in data.items():
+            filename = url.split(type)[0].split("/")[-1]
+            
+            if type == ".mp4":
+                log_msg_success = "Video   - SUCCESS - {0}...".format(filename)
+                log_msg_failure = "Video   - !FAIL!  - {0}...".format(filename)
+            elif type == ".jpg":
+                log_msg_success = "Picture - SUCCESS - {0}...".format(filename)
+                log_msg_failure = "Picture - !FAIL!  - {0}...".format(filename)
 
-        
+            status = getFileByUrl(url=url, type=type)
+
+            if status == 1:
+                log_message = log_msg_failure
+
+            else:
+                log_message = log_msg_success
+
+            #history = self.download_console_textbox.get("0.0", "end")
+            self.download_console_textbox.configure(state=tkinter.NORMAL)
+            self.download_console_textbox.insert("0.0", "[{0}] {1}\n".format(datetime.datetime.now().strftime("%H:%M:%S"), log_message))
+            self.download_console_textbox.configure(state=tkinter.DISABLED)
+
+            idx+=1
+            self.progressbar_1.set((1/len(data))*idx)
+            
     # - Settings - page
     def settings_update_output_button_event(self):
         setOutputPath()
@@ -402,6 +426,10 @@ class App(customtkinter.CTk):
     # -------------------------------
 
     def displayDBUpdate(self):
+        # Download
+        # ---------> Droplist
+        self.download_tab_id_select.configure(values=sorted(getUsers().values()))
+
         # Settings
         # ---------> Textbox
         self.settings_pathield_textbox.configure(state=tkinter.NORMAL)
@@ -438,11 +466,6 @@ class App(customtkinter.CTk):
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
-
-
-    def paste_url(self):
-        print("URL PASTED - CODE RUNNING")
-        self.step2_txt.configure(text="STEP 2 - COMPLETE", bg_color="green")
 
     def button_presssed(self):
         print("PRESSED !!")

@@ -113,19 +113,19 @@ def getURL(id = "None"):
 
     return URL
 
-def getContentDict(): # - Requires the response request already in the clipboard
+def getContentDict(videos=True, photos=True): # - Requires the response request already in the clipboard
     response_dict = json.loads(pyperclip.paste())
     output_dict = {}
 
     for element_idx in range (0, len(response_dict["data"]["reels_media"][0]["items"])):
 
         # - If video
-        if response_dict["data"]["reels_media"][0]["items"][element_idx]["is_video"] == True:
+        if response_dict["data"]["reels_media"][0]["items"][element_idx]["is_video"] == True and videos == True:
             url = response_dict["data"]["reels_media"][0]["items"][element_idx]["video_resources"][0]["src"]
             output_dict[url] = ".mp4"
 
         # - If picture
-        else:
+        elif photos == True:
             url = response_dict["data"]["reels_media"][0]["items"][element_idx]["display_url"]      
             output_dict[url] = ".jpg"
 
