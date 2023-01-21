@@ -153,12 +153,11 @@ class App(customtkinter.CTk):
         self.box2 = customtkinter.CTkFrame(self.download_frame)
         self.box2.grid(row=4, column=0, padx=(40, 40), pady=(20, 10))
 
-        self.switch_1 = customtkinter.CTkSwitch(self.box2, command=self.download_switch_1, text="Get Pics")
-        self.switch_1.select(False)
-        self.switch_1.grid(row=0, column=0, padx=(50,225), pady=(20, 20))
+        self.switch_1 = customtkinter.CTkSwitch(self.box2, text="Get Pics")
         self.switch_1.select()
+        self.switch_1.grid(row=0, column=0, padx=(50,225), pady=(20, 20))
 
-        self.switch_2 = customtkinter.CTkSwitch(self.box2, command=self.download_switch_2, text="Get Vids")
+        self.switch_2 = customtkinter.CTkSwitch(self.box2, text="Get Vids")
         self.switch_2.grid(row=0, column=0, padx=(225,50), pady=(20, 20))
         self.switch_2.select()
 
@@ -230,27 +229,33 @@ class App(customtkinter.CTk):
                                                         height=100)
         self.settings_btn3.grid(row=2, column=1, padx=(0,10), pady=(20, 20)) 
 
-        # TICKABLE BUTTONS
-        """
-        self.settings_checkbox_1 = customtkinter.CTkCheckBox(master=self.settings_frame)
-        self.settings_checkbox_1.grid(row=3, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
-
-        self.settings_checkbox_2 = customtkinter.CTkCheckBox(master=self.settings_frame)
-        self.settings_checkbox_2.grid(row=3, column=1, padx=(10, 10), pady=(20, 20), sticky="n")
-        """
-
         # PATHFIELD
         self.settings_pathield_textbox = customtkinter.CTkTextbox(self.settings_frame, width=400, height=10)
         self.settings_pathield_textbox.grid(row=3, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew", columnspan=2)   
         self.settings_pathield_textbox.insert("0.0", getOutputPath())
         self.settings_pathield_textbox.configure(state=tkinter.DISABLED)     
 
-        # SWITCHES BUTTONS        
-        self.settings_switch_1 = customtkinter.CTkSwitch(self.settings_frame, command=lambda: print("switch 1 toggle"), text="Create one folder per ID")
-        self.settings_switch_1.grid(row=4, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
+        """
+        # TICKABLE BUTTONS
+        self.settings_checkbox_1 = customtkinter.CTkCheckBox(master=self.settings_frame, text="Create one folder per ID")
+        self.settings_checkbox_1.grid(row=4, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
 
-        self.settings_switch_2 = customtkinter.CTkSwitch(self.settings_frame, command=lambda: print("switch 2 toggle"), text="Create one folder per day")
-        self.settings_switch_2.grid(row=4, column=1, padx=(10, 10), pady=(20, 20), sticky="n")   
+        self.settings_checkbox_2 = customtkinter.CTkCheckBox(master=self.settings_frame, text="Create one folder per day")
+        self.settings_checkbox_2.grid(row=4, column=1, padx=(10, 10), pady=(20, 20), sticky="n")
+        """
+        
+        # SWITCHES BUTTONS        
+        self.settings_id_folder_state = customtkinter.CTkSwitch(self.settings_frame, command=self.settings_id_folder_state_event, text="Create one folder per ID")
+        self.settings_id_folder_state.grid(row=4, column=0, padx=(10, 10), pady=(20, 20), sticky="n")
+
+        if getIdFolderState() == True:
+            self.settings_id_folder_state.select()
+
+        self.settings_daily_folder_state = customtkinter.CTkSwitch(self.settings_frame, command=self.settings_daily_folder_state_event, text="Create one folder per day")
+        self.settings_daily_folder_state.grid(row=4, column=1, padx=(10, 10), pady=(20, 20), sticky="n")   
+
+        if getDailyFolderState() == True:
+            self.settings_daily_folder_state.select()
         
         # FRAME - SETTINGS > ADD_USER
         self.settings_add_user_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -373,12 +378,6 @@ class App(customtkinter.CTk):
         id = self.download_id_entry.get()
         getUrlById(userid=id)
 
-    def download_switch_1(self):
-        bool_get_pics = self.switch_1.get()
-
-    def download_switch_2(self):
-        bool_get_vids = self.switch_2.get()
-
     def download_run(self):
         self.step2_txt.configure(text="STEP 2 - COMPLETE", bg_color="green")
 
@@ -418,6 +417,12 @@ class App(customtkinter.CTk):
             app.update()
             
     # - Settings - page
+    def settings_id_folder_state_event(self):
+        setIdFolderState(getIdFolderState())
+
+    def settings_daily_folder_state_event(self):
+        setDailyFolderState(getDailyFolderState())
+
     def settings_update_output_button_event(self):
         setOutputPath()
         self.displayDBUpdate()
@@ -469,7 +474,7 @@ class App(customtkinter.CTk):
         # ---------> Droplist
         self.settings_delete_user_option_menu.configure(values=sorted(getUsers().values()))
 
-    def dictToString(self, my_dict):
+    def dictToString(self, my_dict : dict) -> str:
         """
         This function returns the list of users and their IDs used in the ADD_USER/DELETE_USER section
         """
@@ -480,9 +485,6 @@ class App(customtkinter.CTk):
 
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
-
-    def button_presssed(self):
-        print("PRESSED !!")
 
 
 if __name__ == "__main__":

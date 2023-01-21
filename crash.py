@@ -9,7 +9,6 @@ def msgbox(msg, title="Error", auto_copy=1, windowtype=1):
     if result == 1 and auto_copy == 1:
         pyperclip.copy(msg)
 
-
 def list_files(startpath):
     output = ""
 
