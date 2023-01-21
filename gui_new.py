@@ -4,6 +4,7 @@ import os
 from PIL import Image
 from QT_saver import *
 import datetime
+import time
 
 
 class App(customtkinter.CTk):
@@ -13,6 +14,7 @@ class App(customtkinter.CTk):
         # - Variables
         self.userlist         = sorted(getUsers().values())
         self.userlistToString = self.dictToString(getUsers())
+        
 
         self.title("QTSaver")
         #self.geometry("1000x710")
@@ -151,11 +153,12 @@ class App(customtkinter.CTk):
         self.box2 = customtkinter.CTkFrame(self.download_frame)
         self.box2.grid(row=4, column=0, padx=(40, 40), pady=(20, 10))
 
-        self.switch_1 = customtkinter.CTkSwitch(self.box2, command=lambda: print("switch 1 toggle"), text="Get Pics")
+        self.switch_1 = customtkinter.CTkSwitch(self.box2, command=self.download_switch_1, text="Get Pics")
+        self.switch_1.select(False)
         self.switch_1.grid(row=0, column=0, padx=(50,225), pady=(20, 20))
         self.switch_1.select()
 
-        self.switch_2 = customtkinter.CTkSwitch(self.box2, command=lambda: print("switch 2 toggle"), text="Get Vids")
+        self.switch_2 = customtkinter.CTkSwitch(self.box2, command=self.download_switch_2, text="Get Vids")
         self.switch_2.grid(row=0, column=0, padx=(225,50), pady=(20, 20))
         self.switch_2.select()
 
@@ -337,7 +340,6 @@ class App(customtkinter.CTk):
         self.step1_txt.configure(text="STEP 1 - NOT COMPLETE", bg_color="red")
         self.step2_txt.configure(text="STEP 2 - NOT COMPLETE", bg_color="red")
 
-
     # - Frame Transitioning > Sidebar
     def home_button_event(self):
         self.select_frame_by_name("home")
@@ -371,6 +373,12 @@ class App(customtkinter.CTk):
         id = self.download_id_entry.get()
         getUrlById(userid=id)
 
+    def download_switch_1(self):
+        bool_get_pics = self.switch_1.get()
+
+    def download_switch_2(self):
+        bool_get_vids = self.switch_2.get()
+
     def download_run(self):
         self.step2_txt.configure(text="STEP 2 - COMPLETE", bg_color="green")
 
@@ -380,19 +388,25 @@ class App(customtkinter.CTk):
             filename = url.split(type)[0].split("/")[-1]
             
             if type == ".mp4":
-                log_msg_success = "Video   - SUCCESS - {0}...".format(filename)
-                log_msg_failure = "Video   - !FAIL!  - {0}...".format(filename)
+                log_msg_success = "VID - SUCCESS - {0}...".format(filename)
+                log_msg_failure = "VID - !FAIL!  - {0}...".format(filename)
+                log_msg_ignored = "VID - IGNORED - {0}...".format(filename)
             elif type == ".jpg":
-                log_msg_success = "Picture - SUCCESS - {0}...".format(filename)
-                log_msg_failure = "Picture - !FAIL!  - {0}...".format(filename)
+                log_msg_success = "PIC - SUCCESS - {0}...".format(filename)
+                log_msg_failure = "PIC - !FAIL!  - {0}...".format(filename)
+                log_msg_ignored = "PIC - IGNORED - {0}...".format(filename)
 
-            status = getFileByUrl(url=url, type=type)
+            if type == ".jpg" and self.switch_1.get() == 1 or type == ".mp4" and self.switch_2.get() == 1:
+                status = getFileByUrl(url=url, type=type)
+            else:
+                status = "Ignored"
 
             if status == 1:
                 log_message = log_msg_failure
-
-            else:
+            elif status == 0:
                 log_message = log_msg_success
+            else:
+                log_message = log_msg_ignored
 
             #history = self.download_console_textbox.get("0.0", "end")
             self.download_console_textbox.configure(state=tkinter.NORMAL)
@@ -401,6 +415,7 @@ class App(customtkinter.CTk):
 
             idx+=1
             self.progressbar_1.set((1/len(data))*idx)
+            app.update()
             
     # - Settings - page
     def settings_update_output_button_event(self):
@@ -465,7 +480,6 @@ class App(customtkinter.CTk):
 
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
-
 
     def button_presssed(self):
         print("PRESSED !!")
