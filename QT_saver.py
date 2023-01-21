@@ -17,6 +17,26 @@ app_config.read(os.path.join(dirname, "./config.ini"))
 SYSTEM_SECTION_APP    = app_config.sections()[0]
 SAVEPATH              = str(app_config.get(SYSTEM_SECTION_APP, 'savepath'))
 
+def getIdFolderState() -> bool:
+    status = str(app_config.get(SYSTEM_SECTION_APP, 'idfolders'))
+    return status.lower() in ("yes", "true", "t", "1")
+
+def setIdFolderState(status : bool):
+    app_config.set(SYSTEM_SECTION_APP, 'idfolders', str(not status))
+    
+    with open('config.ini', 'w') as configfile:
+        app_config.write(configfile)
+
+def getDailyFolderState() -> bool:
+    status = str(app_config.get(SYSTEM_SECTION_APP, 'dailyfolder'))
+    return status.lower() in ("yes", "true", "t", "1")
+
+def setDailyFolderState(status : bool):
+    app_config.set(SYSTEM_SECTION_APP, 'dailyfolder', str(not status))
+
+    with open('config.ini', 'w') as configfile:
+        app_config.write(configfile)
+
 def getUsers():
     return json.loads(str(app_config.get(SYSTEM_SECTION_APP, 'savedusers')))
 
