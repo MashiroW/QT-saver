@@ -6,6 +6,7 @@ import os
 import ast
 from crash import *
 from tkinter.filedialog import askdirectory
+from datetime import datetime
 
 
 #Relative path
@@ -109,19 +110,18 @@ def openOuputPath():
     except:
         msgbox(msg="Your folder doesn't exist... yet ?", title="Error", windowtype=0)
 
-def getUrlByName(userName):
+def copyUrlByName(userName):
     savedUsers = getUsers()
     for key, value in savedUsers.items():
         if value == userName:
             pyperclip.copy(getURL(id=key))
             return getURL(id=key)
 
-def getUrlById(userid):
+def copyUrlById(userid : str):
     url = getURL(id=userid)
     pyperclip.copy(url)
-    return url
 
-def getURL(id = "None"):
+def getURL(id : str = "None") -> str:
 
     if id == "None":
         ACCOUNT_ID    = str(app_config.get(SYSTEM_SECTION_APP, "userid"))
@@ -133,9 +133,11 @@ def getURL(id = "None"):
 
     return URL
 
-def getContentDict(videos=True, photos=True): # - Requires the response request already in the clipboard
+def getContentDict(videos : bool = True, photos : bool = True) -> dict: # - Requires the response request already in the clipboard
     response_dict = json.loads(pyperclip.paste())
     output_dict = {}
+
+    userId = response_dict["data"]["reels_media"][0]["user"]["id"]
 
     for element_idx in range (0, len(response_dict["data"]["reels_media"][0]["items"])):
 
@@ -149,14 +151,21 @@ def getContentDict(videos=True, photos=True): # - Requires the response request 
             url = response_dict["data"]["reels_media"][0]["items"][element_idx]["display_url"]      
             output_dict[url] = ".jpg"
 
-    return output_dict
+    return output_dict, userId
 
-def getFileByUrl(url, type):
+def getFileByUrl(url : str, type : str, userId : str, dailyFolderState : bool = False, idFolderState : bool = True) -> str:
 
     savepath = getOutputPath()
 
+    if dailyFolderState == True:
+        date = datetime.today().strftime('%Y-%m-%d')
+        savepath = "{0}\{1}".format(savepath, date)
+
+    if idFolderState == True:
+        savepath = "{0}\{1}".format(savepath, userId)
+
     try:
-        os.makedirs(savepath)
+        os.makedirs(savepath, exist_ok=True)
     except FileExistsError:
         pass
 
@@ -168,27 +177,6 @@ def getFileByUrl(url, type):
 
     except:
         return 1
-
-"""
-def save_content_dict(response_dict): # - Require the dict returned by the getContentDict function
-
-    # - Setting up the output folder
-    savepath = getOutputPath()
-
-    try:
-        os.makedirs(savepath)
-    except FileExistsError:
-        pass
-
-    # - Saving
-    for url, type in response_dict.items():
-        #print(type)
-        response = requests.get(url)
-        type = response_dict[url]
-
-        file_savepath = savepath + "\\" + str(url + type)
-        open(file_savepath, "wb").write(response.content)
-"""
 
 def welcome():
     print("------TURBO CUTIE SAVER 3000-----")
