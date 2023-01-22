@@ -98,7 +98,7 @@ class MyWindow:
         self.infomsg["text"]="Idling..."
         # - ---
 
-        self.URL = getURL()
+        self.URL = getUrlById()
         
     def click_btn02(self):
         # - STYLE
@@ -112,7 +112,7 @@ class MyWindow:
         # - ---
 
         field_txt = self.txtfld.get()
-        self.URL = getURL(id = field_txt)
+        self.URL = getUrlById(id = field_txt)
 
     def click_btn03(self):
         # - STYLE

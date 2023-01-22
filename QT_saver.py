@@ -8,7 +8,6 @@ from crash import *
 from tkinter.filedialog import askdirectory
 from datetime import datetime
 
-
 #Relative path
 dirname = os.path.dirname(__file__)
 
@@ -16,32 +15,57 @@ dirname = os.path.dirname(__file__)
 app_config = ConfigParser()
 app_config.read(os.path.join(dirname, "./config.ini"))
 SYSTEM_SECTION_APP    = app_config.sections()[0]
-SAVEPATH              = str(app_config.get(SYSTEM_SECTION_APP, 'savepath'))
 
 def getIdFolderState() -> bool:
+    """
+        Returns the state of the 'idfolders' value in the .ini file
+        in a boolean
+    """
     status = str(app_config.get(SYSTEM_SECTION_APP, 'idfolders'))
     return status.lower() in ("yes", "true", "t", "1")
 
 def setIdFolderState(status : bool):
+    """
+        Edits the value of the 'idfolders' field from the .ini file
+        with the boolean given as arguement
+    """
     app_config.set(SYSTEM_SECTION_APP, 'idfolders', str(not status))
     
     with open('config.ini', 'w') as configfile:
         app_config.write(configfile)
 
 def getDailyFolderState() -> bool:
+    """
+        Returns the state of the 'dailyfolder' value in the .ini file
+        in a boolean
+    """
     status = str(app_config.get(SYSTEM_SECTION_APP, 'dailyfolder'))
     return status.lower() in ("yes", "true", "t", "1")
 
 def setDailyFolderState(status : bool):
+    """
+        Edits the value of the 'dailyfolder' field from the .ini file
+        with the boolean given as arguement
+    """
     app_config.set(SYSTEM_SECTION_APP, 'dailyfolder', str(not status))
 
     with open('config.ini', 'w') as configfile:
         app_config.write(configfile)
 
-def getUsers():
+def getUsers() -> dict:
+    """
+        Returns a dict as a json object containing the users database
+        in the { Id1 : username1, ... , IdN : usernameN}
+    """
     return json.loads(str(app_config.get(SYSTEM_SECTION_APP, 'savedusers')))
 
-def addUser(userId, userName):
+def addUser(userId, userName) -> int:
+    """
+        Adds an user to the database. 
+        Returns 1 in case of failure.
+        Returns 0 in case of success.
+    """
+
     savedUsers = getUsers()
     if userId in savedUsers or userName in savedUsers.values():
         return 1
@@ -56,7 +80,13 @@ def addUser(userId, userName):
             app_config.write(configfile)
         return 0
 
-def deleteUserById(userId):
+def deleteUserById(userId) -> int:
+    """
+        Deletes an user from the database by Id. 
+        Returns 1 in case of failure.
+        Returns 0 in case of success.
+    """
+
     savedUsers = getUsers()
     if userId in savedUsers:
         savedUsers.pop(userId)
@@ -72,7 +102,13 @@ def deleteUserById(userId):
     else:
         return 1
 
-def deleteUserByName(userName):
+def deleteUserByName(userName) -> int:
+    """
+        Deletes an user from the database by UserName. 
+        Returns 1 in case of failure.
+        Returns 0 in case of success.
+    """
+
     savedUsers = getUsers()
     for key, value in savedUsers.items():
         if value == userName:
@@ -87,7 +123,11 @@ def deleteUserByName(userName):
             return 0
     return 1
 
-def getOutputPath():
+def getOutputPath() -> str:
+    """
+        Returns the output path from the database in a string 
+    """
+
     path = str(app_config.get(SYSTEM_SECTION_APP, 'savepath'))
 
     if path[0] == ".":
@@ -97,6 +137,11 @@ def getOutputPath():
         return path.replace("/", "\\")
 
 def setOutputPath():
+    """
+        Edits the output path from the database from opening the
+        windows explorer and letting the user edit its path
+    """
+
     savepath = askdirectory()
     if savepath != "":
         app_config.set(SYSTEM_SECTION_APP, 'savepath', str(savepath))
@@ -105,23 +150,43 @@ def setOutputPath():
             app_config.write(configfile)
 
 def openOuputPath():
+    """
+        Opens the output path from the database using the
+        windows explorer
+    """
     try:
         os.startfile(getOutputPath())
     except:
         msgbox(msg="Your folder doesn't exist... yet ?", title="Error", windowtype=0)
 
-def copyUrlByName(userName):
+def copyUrlByName(userName) -> str:
+    """
+        Generates the URL corresponding to the UserName specified
+        in the arguement and copies it in the clipboard.
+        The url is also returned in a string.
+    """
     savedUsers = getUsers()
     for key, value in savedUsers.items():
         if value == userName:
-            pyperclip.copy(getURL(id=key))
-            return getURL(id=key)
+            pyperclip.copy(getUrlById(id=key))
+            return getUrlById(id=key)
 
-def copyUrlById(userid : str):
-    url = getURL(id=userid)
+def copyUrlById(userid : str) -> str:
+    """
+        Generates the URL corresponding to the Id specified
+        in the arguement and copies it in the clipboard.
+        The url is also returned in a string.
+    """
+
+    url = getUrlById(id=userid)
     pyperclip.copy(url)
-
-def getURL(id : str = "None") -> str:
+    return url
+    
+def getUrlById(id : str = "None") -> str:
+    """
+        Generates the URL corresponding to the Id specified
+        in the arguement and returns it in a string.
+    """
 
     if id == "None":
         ACCOUNT_ID    = str(app_config.get(SYSTEM_SECTION_APP, "userid"))
@@ -133,7 +198,15 @@ def getURL(id : str = "None") -> str:
 
     return URL
 
-def getContentDict(videos : bool = True, photos : bool = True) -> dict: # - Requires the response request already in the clipboard
+def getContentDict(videos : bool = True, photos : bool = True) -> list:
+    """
+        Requires the response request already in the clipboard
+        beforehand. This returns creates you a dict in the
+        {URL : type} format. URL is the URL of the content and
+        type is its type (.mp4/.jpg). Alongside this dict, the
+        function also returns the userId associated with that
+        response request. The actual output format is [dict, str].
+    """
     response_dict = json.loads(pyperclip.paste())
     output_dict = {}
 
@@ -153,7 +226,20 @@ def getContentDict(videos : bool = True, photos : bool = True) -> dict: # - Requ
 
     return output_dict, userId
 
-def getFileByUrl(url : str, type : str, userId : str, dailyFolderState : bool = False, idFolderState : bool = True) -> str:
+def getFileByUrl(url : str, type : str, userId : str, dailyFolderState : bool = False, idFolderState : bool = True) -> int:
+    """
+        Downloads from the url in arguement the file to the output
+        folder defined in the .ini file. 
+
+        If dailyFolderState is set to True, a folder containing
+        today's date will be created.
+
+        If idFolderState is set to True, a folder containing the
+        userId will be created.
+
+        Returns 1 in case of failure.
+        Returns 0 in case of success.
+    """
 
     savepath = getOutputPath()
 
@@ -178,11 +264,22 @@ def getFileByUrl(url : str, type : str, userId : str, dailyFolderState : bool = 
     except:
         return 1
 
+"""
+    From here, all the rest are Legcay functions for the old
+    CLI version of QTSaver ONLY
+"""
+
+SAVEPATH = str(app_config.get(SYSTEM_SECTION_APP, 'savepath'))
+
 def welcome():
+    """
+        Basic Welcome Message for the FIRST version of QTSaver that
+        was CLI based only
+    """
     print("------TURBO CUTIE SAVER 3000-----")
     print("---------------------------------")
     print("Open the following URL in your browser that's already logged in to Instagram:\n")
-    print(getURL(), "\n")
+    print(getUrlById(), "\n")
 
     print("Now copy to your clipboard the JSON API response then press ENTER")
     os.system("Pause")
@@ -252,7 +349,3 @@ def get_content():
 
 if __name__ == "__main__":
     get_content()
-
-
-
-    
