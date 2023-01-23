@@ -1,3 +1,9 @@
 testing.py
 testfile.py
+requirements.txt
 output/
+build
+dist/
+*.spec
+.spec
+
