@@ -61,7 +61,7 @@ If you are looking for the executables here's where you can get them
 
 Version | Status | Link | 
 | ------------- | ------------- | ------------- |
-| QT_Saver GUI (!Recommended!) | Supported | URL_TO_ADD_HERE LATER |
+| QT_Saver GUI (!Recommended!) | Supported | [v2.0](https://github.com/MashiroW/QT-saver/releases/tag/v2.0) |
 | QT_Saver GUI (Legacy) | NOT Supported | URL_TO_ADD_HERE LATER |
 
 -----
