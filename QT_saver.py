@@ -256,8 +256,9 @@ def getFileByUrl(url : str, type : str, userId : str, dailyFolderState : bool = 
         pass
 
     try:
+        timestamp = str(datetime.now().timestamp())
         response = requests.get(url, type)
-        file_savepath = savepath + "\\" + url.split(type)[0].split("/")[-1] + type
+        file_savepath = savepath + "\\" + timestamp + type
         open(file_savepath, "wb").write(response.content)
         return 0
 
