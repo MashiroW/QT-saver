@@ -2,7 +2,7 @@
 
 > 🔴 **⚠️ WARNING – Script No Longer Functional (as of mid-May 2025)**  
 >  
-> After working reliably for over 2.5 years, this script no longer works due to **major changes in Instagram's API and story payloads** introduced in **May 2025**.  
+> After working reliably for over 2.5 years (iOS version included), this script no longer works due to **major changes in Instagram's API and story payloads** introduced in **May 2025**.  
 > Instagram has:
 > 
 > - Broken access to **private stories** first, then extended this to **public stories (especially videos)**.  
@@ -36,6 +36,12 @@
 * **Preview**
 * **Run the project**
 * **Details**
+</details>
+
+<details open>
+<summary>QTSaver for iOS (Shortcut)</summary>
+
+* **Download**
 </details>
 
 <details open>
@@ -109,12 +115,21 @@ https://user-images.githubusercontent.com/47890166/213941207-f419cbf5-de93-4e7a-
   
 ## Details
 The `config.ini` file allows you to access all your options data and also works as the accounts database.
+-----
+# QTSaver iOS (Shortcut)
+
+If you are on iPhone or iPad, you can download QTSaver [here](https://www.icloud.com/shortcuts/0091900ea3034f03a3edd3583e94d051) as a Shortcut
+
+![screencompressed](https://github.com/user-attachments/assets/97c35f20-3b71-4755-ab03-ec5c86594b06)
+
 
 -----
 # Legacy versions (CLI & GUI)
 ## QTSaver GUI (Legacy)
 ### Preview
-![image](https://user-images.githubusercontent.com/47890166/213942991-b6066f5d-13b7-4412-8152-c587a966448d.png)
+
+![B149CF5D-7557-43C0-ADA8-A6BD84561C30](https://github.com/user-attachments/assets/c2f573e1-640b-4053-9f3e-dbe3e10f9336)
+
 
 ### Run the script
   - `python ./gui.py`
