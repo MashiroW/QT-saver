@@ -127,8 +127,7 @@ If you are on iPhone or iPad, you can download QTSaver [here](https://www.icloud
 # Legacy versions (CLI & GUI)
 ## QTSaver GUI (Legacy)
 ### Preview
-
-![B149CF5D-7557-43C0-ADA8-A6BD84561C30](https://github.com/user-attachments/assets/c2f573e1-640b-4053-9f3e-dbe3e10f9336)
+![image](https://user-images.githubusercontent.com/47890166/213942991-b6066f5d-13b7-4412-8152-c587a966448d.png)
 
 
 ### Run the script
