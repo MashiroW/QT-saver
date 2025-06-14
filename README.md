@@ -1,21 +1,5 @@
 ![Alt text](./res/main.png?raw=true "Welcome")
 
-> 🔴 **⚠️ WARNING – Script No Longer Functional (as of mid-May 2025)**  
->  
-> After working reliably for over 2.5 years (iOS version included), this script no longer works due to **major changes in Instagram's API and story payloads** introduced in **May 2025**.  
-> Instagram has:
-> 
-> - Broken access to **private stories** first, then extended this to **public stories (especially videos)**.  
-> - Begun **splitting story videos into dozens of unusable fragments**, including:  
->   - Video chunks with **no video track** (just sound),  
->   - Segments that **cannot be played individually**,  
->   - Payloads that are dynamically generated and **hidden from browser DevTools**.
-> 
-> These changes have effectively **broken all current methods and tools** (including popular third-party story saver websites) that used to extract stories.
-> 
-> **Until new workarounds are discovered, this script is deprecated.** Feel free to watch the repo in case future updates bring a solution.
-
-
 ## Summary
 
 <details open>
