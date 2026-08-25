@@ -1436,10 +1436,13 @@ class App(customtkinter.CTk):
         for i, step in enumerate(steps, start=1):
             row = customtkinter.CTkFrame(steps_frame, fg_color="transparent")
             row.pack(fill="x", padx=14, pady=(10 if i == 1 else 2, 10 if i == len(steps) else 2))
+            row.grid_columnconfigure(1, weight=1)
             customtkinter.CTkLabel(row, text=str(i), width=20, font=customtkinter.CTkFont(size=12, weight="bold"),
-                                    text_color=COLOR_GOLD, anchor="n").pack(side="left")
+                                    text_color=COLOR_GOLD, anchor="nw", justify="left"
+                                    ).grid(row=0, column=0, sticky="nw")
             customtkinter.CTkLabel(row, text=step, text_color=COLOR_TEXT, justify="left",
-                                    wraplength=310, anchor="w").pack(side="left", padx=(6, 0), fill="x")
+                                    wraplength=310, anchor="nw"
+                                    ).grid(row=0, column=1, sticky="nw", padx=(6, 0))
 
         self._primary_button(panel, "J'ai compris", self._close_modal, width=200).pack(pady=(0, 10))
 
