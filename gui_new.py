@@ -335,7 +335,7 @@ class App(customtkinter.CTk):
 
         self._image_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "res/")
 
-        self.title("QTSaver v2")
+        self.title("QTSaver v3.0")
         self.geometry("1180x820")
         self.minsize(980, 680)
         self.iconbitmap(os.path.join(self._image_dir, "splash-removebg-preview.ico"))
