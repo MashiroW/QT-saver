@@ -1,146 +1,73 @@
 ![Alt text](./res/main.png?raw=true "Welcome")
 
-> 🔴 **⚠️ WARNING – Script No Longer Functional (as of mid-September 2025)**  
->
-> After working reliably for over 2.5 years, this script no longer works due to **major changes in Instagram's API and story payloads** introduced in **May 2025**.  
-> After working reliably for over 2.5 years (iOS version included), this script no longer works due to **major changes in Instagram's API and story payloads** introduced in **May 2025**.  
-> Instagram has:
-> 
-> - Broken access to **private stories** first, then extended this to **public stories (especially videos)**.  
-> - Begun **splitting story videos into dozens of unusable fragments**, including:  
->   - Video chunks with **no video track** (just sound),  
->   - Segments that **cannot be played individually**,  
->   - Payloads that are dynamically generated and **hidden from browser DevTools**.
-> 
-> These changes have effectively **broken all current methods and tools** (including popular third-party story saver websites) that used to extract stories.
-> 
-> **Until new workarounds are discovered, this script is deprecated.** Feel free to watch the repo in case future updates bring a solution.
-
 ## Summary
 
 <details open>
 <summary>Intro</summary>
 
 * **Description**
-* **Features list comparaison**
 * **Releases**
 </details>
 
 <details open>
-<summary>Projects Setup</summary>
+<summary>Project Setup</summary>
 </details>
 
 <details open>
-<summary>QTSaver GUI (Actual)</summary>
+<summary>QTSaver GUI</summary>
 
 * **Preview**
 * **Run the project**
 * **Details**
 </details>
 
-<details open>
-<summary>QTSaver for iOS (Shortcut)</summary>
-
-* **Download**
-</details>
-
-<details open>
-<summary>Legacy versions</summary>
-
-* <sub>Old GUI (Legacy)</sub>
-* <sub>QTSaver CLI</sub>
-
-
-</details>
-
 -----
 # Intro
 ## Description
-- This script is used to save someone's stories on Instagram.
-- It can save EVERY story (public&private) you have access to with your account.
-- This script DOESN'T USE your credentials.
-- You will need to have your Instagram account logged in your usual browser.
+QTSaver v3.0 saves someone's Instagram stories — public and private, photos and videos — straight to your computer.
 
-## Features List Comparaison
-Feature | QT_Saver GUI | QT_Saver GUI (Legacy) | QT_Saver CLI (Legacy)
-| ------------- | ------------- | ------------- | ------------- |
-| Download Public and Private Stories  | YES  | YES  | YES  |
-| Store accounts IDs  | YES  | Only one ID manually through the `.ini` file  | Only one ID manually through the `.ini` file  |
-| Editing the accounts list while running | YES | NO | NO |
-| Editing the ouput folder while running | YES | NO | NO |
-| Folder creation by Id option | YES | NO | NO |
-| Folder creation by date option | YES | NO | NO |
-| Supports the use of unsaved IDs | YES | YES | NO |
-| Supports relative paths | YES | NO | NO |
-| Error log output | YES | YES | NO |
-| Download pics and/or vids option | YES | NO | NO |
-| Progress shown while downloading | YES | NO | YES |
-| Light mode | YES | NO | NO |
-| Dark mode | YES | YES | YES |
+Earlier versions worked without ever touching your Instagram credentials, relying on a URL you'd open in your own logged-in browser and a JSON response you'd copy over by hand. Instagram's May 2025 API changes broke that method for good (not just for QTSaver — every tool built the same way stopped working). Version 3.0 is a from-the-ground-up rewrite around a real, authenticated Instagram session (via `instagrapi`), which is what makes story downloading reliable again.
+
+**How it works:**
+- You log in once with your Instagram username and password (optionally saved securely to your OS credential store, never as plain text).
+- Your session is cached locally so you don't need to log in every time you open the app.
+- Add the accounts you want to track by username, and QTSaver fetches their current stories directly through the authenticated session.
+- Everything you download is indexed locally, so the built-in Library/Gallery view stays in sync with what's actually on disk.
 
 ## Releases
 If you are looking for the executables here's where you can get them
 
-Version | Status | Link | 
+Version | Status | Link |
 | ------------- | ------------- | ------------- |
-| QT_Saver GUI (!Recommended!) | Supported | [v2.0](https://github.com/MashiroW/QT-saver/releases/tag/v2.0) |
-| QT_Saver GUI (Legacy) | NOT Supported | URL_TO_ADD_HERE LATER |
+| QTSaver v3.0 | Supported | Coming soon |
+| QTSaver v2.0.1 (legacy, no-login) | Archived — no longer functional | [v2.0.1](https://github.com/MashiroW/QT-saver/releases/tag/v2.0.1) |
 
 -----
 ## Project Setup
 
-These three projects have been developed with `Python v.3.10.7`.
-This setup here works with all the QT_Saver version.
-
-### Generate a requirements.txt file
-In your root folder, do:
-
-  - `pip install pipreqs`
-  - `python -m pipreqs.pipreqs . --force`
+This project is developed with `Python v3.10`.
 
 ### Install the dependencies
 
 In your root folder, do:
   - `pip install --upgrade pip`
-  - `pip install pipreqs`
   - `pip install -r requirements.txt`
+
 -----
 
 # QTSaver GUI
 ## Preview
 https://user-images.githubusercontent.com/47890166/213941207-f419cbf5-de93-4e7a-87ab-5c365a819ba7.mp4
 
-## Run the script
-  - `python ./new_gui.py`
-  
-## Details
-The `config.ini` file allows you to access all your options data and also works as the accounts database.
------
-# QTSaver iOS (Shortcut)
-
-If you are on iPhone or iPad, you can download QTSaver [here](https://www.icloud.com/shortcuts/0091900ea3034f03a3edd3583e94d051) as a Shortcut
-
-![screencompressed](https://github.com/user-attachments/assets/97c35f20-3b71-4755-ab03-ec5c86594b06)
-
-
------
-# Legacy versions (CLI & GUI)
-## QTSaver GUI (Legacy)
-### Preview
-![image](https://user-images.githubusercontent.com/47890166/213942991-b6066f5d-13b7-4412-8152-c587a966448d.png)
-
-
-### Run the script
-  - `python ./gui.py`
+## Run the project
+  - `python gui_new.py`
 
 ## Details
-The `config.ini` file allows you to access all your options.
-In that file the only two fields that are related to this Legacy version are `userid=` and `savepath=`
+On first launch, log in with your Instagram account (2FA/verification codes are supported if your account requires them). From there:
 
-## QTSaver GUI (Legacy)
-### Run the script
-  - `python ./QT_saver.py`
+- **Accounts** — add/remove the Instagram accounts you want to track, and pull their current stories.
+- **Library** — browse, preview, and manage everything you've downloaded so far.
+- **Settings** — change your output folder and manage your session.
+- **About** — app info and links.
 
-## Details
-The `config.ini` file allows you to access all your options.
-In that file the only two fields that are related to this Legacy version are `userid=` and `savepath=`
+`config.ini` stores your output path and saved account list. Your Instagram session is cached in `session.json`, kept locally and never committed to the repo.
