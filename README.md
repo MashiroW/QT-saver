@@ -57,7 +57,8 @@ In your root folder, do:
 
 # QTSaver GUI
 ## Preview
-https://user-images.githubusercontent.com/47890166/213941207-f419cbf5-de93-4e7a-87ab-5c365a819ba7.mp4
+<!-- https://user-images.githubusercontent.com/47890166/213941207-f419cbf5-de93-4e7a-87ab-5c365a819ba7.mp4 -->
+https://github.com/user-attachments/assets/77bc609e-2b4d-4627-a3e2-83bc9e87afc9
 
 ## Run the project
   - `python gui_new.py`
