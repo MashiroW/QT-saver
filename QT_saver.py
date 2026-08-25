@@ -41,7 +41,7 @@ def addUser(userId, userName) -> int:
 
         app_config.set(SYSTEM_SECTION_APP, 'savedusers', str(savedUsers))
 
-        with open('config.ini', 'w') as configfile:
+        with open(os.path.join(dirname, 'config.ini'), 'w') as configfile:
             app_config.write(configfile)
         return 0
 
@@ -60,7 +60,7 @@ def deleteUserByName(userName) -> int:
 
             app_config.set(SYSTEM_SECTION_APP, 'savedusers', str(savedUsers))
 
-            with open('config.ini', 'w') as configfile:
+            with open(os.path.join(dirname, 'config.ini'), 'w') as configfile:
                 app_config.write(configfile)
 
             return 0
@@ -89,7 +89,7 @@ def setOutputPath():
     if savepath != "":
         app_config.set(SYSTEM_SECTION_APP, 'savepath', str(savepath))
 
-        with open('config.ini', 'w') as configfile:
+        with open(os.path.join(dirname, 'config.ini'), 'w') as configfile:
             app_config.write(configfile)
 
 def openOuputPath():
