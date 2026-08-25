@@ -1,9 +1,11 @@
-testing.py
-testfile.py
 requirements.txt
 output/
 build
 dist/
 *.spec
 .spec
+session.json
+config.ini
+__pycache__/
+downloads_index.json
 
