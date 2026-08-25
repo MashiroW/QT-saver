@@ -1409,17 +1409,17 @@ class App(customtkinter.CTk):
 
     def _build_security_notice_content(self, panel):
         customtkinter.CTkLabel(panel, text="", image=self._icon_badge("!", 60)).pack(pady=(38, 10))
-        customtkinter.CTkLabel(panel, text="Avant de vous connecter", font=customtkinter.CTkFont(size=18, weight="bold"),
+        customtkinter.CTkLabel(panel, text="Before you connect", font=customtkinter.CTkFont(size=18, weight="bold"),
                                 text_color=COLOR_TEXT).pack(pady=(0, 14))
 
         body = (
-            "QTSaver se connecte à Instagram comme le ferait l'app mobile officielle. "
-            "Instagram peut donc répertorier ce nouvel appareil (souvent affiché comme un "
-            "Google Pixel / Android) et le signaler comme une connexion inhabituelle.\n\n"
-            "Ce n'est pas une activité suspecte : c'est normal avec cette méthode de connexion. "
-            "Mais si vous ne validez pas ce nouvel appareil, Instagram peut geler le compte le "
-            "temps d'une vérification, ou vous demander de changer de mot de passe.\n\n"
-            "Pour l'éviter, allez vérifier cet appareil dans l'app Instagram :"
+            "QTSaver logs in to Instagram the same way the official mobile app does. "
+            "Instagram may therefore list this as a new device (often shown as a "
+            "Google Pixel / Android) and flag it as unusual activity.\n\n"
+            "This isn't actually suspicious -- it's normal with this login method. "
+            "But if you don't confirm this new device, Instagram can temporarily freeze "
+            "the account while it verifies you, or ask you to change your password.\n\n"
+            "To avoid that, go confirm this device in the Instagram app:"
         )
         customtkinter.CTkLabel(panel, text=body, text_color=COLOR_TEXT_MUTED, justify="left",
                                 wraplength=400, anchor="w").pack(padx=36, pady=(0, 14), fill="x")
@@ -1427,11 +1427,11 @@ class App(customtkinter.CTk):
         steps_frame = customtkinter.CTkFrame(panel, fg_color=COLOR_SURFACE_HOVER, corner_radius=14)
         steps_frame.pack(padx=36, pady=(0, 18), fill="x")
         steps = [
-            "Profil → ≡ (les 3 barres horizontales, en haut à droite)",
-            "Centre de comptes",
-            "Mot de passe et sécurité",
-            "Où vous êtes connecté(e)",
-            "Repérez l'appareil récent (Android / Google Pixel) et confirmez que c'est bien vous, sans le déconnecter",
+            "Profile → ☰ (the 3-line menu, top right)",
+            "Accounts Center",
+            "Password and security",
+            "Where you're logged in",
+            "Find the recent device (Android / Google Pixel) and confirm it's you, without logging it out",
         ]
         for i, step in enumerate(steps, start=1):
             row = customtkinter.CTkFrame(steps_frame, fg_color="transparent")
@@ -1444,7 +1444,7 @@ class App(customtkinter.CTk):
                                     wraplength=310, anchor="nw"
                                     ).grid(row=0, column=1, sticky="nw", padx=(6, 0))
 
-        self._primary_button(panel, "J'ai compris", self._close_modal, width=200).pack(pady=(0, 10))
+        self._primary_button(panel, "Got it", self._close_modal, width=200).pack(pady=(0, 10))
 
     # ==================================================================
     # ACCOUNT / LOGIN MODAL (your own Instagram credentials)
