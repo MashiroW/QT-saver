@@ -1,0 +1,7 @@
+pyperclip
+requests
+customtkinter>=5.2
+Pillow
+instagrapi>=3
+keyring
+opencv-python
