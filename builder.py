@@ -6,7 +6,7 @@ filepath = os.path.join(dirpath, "gui_new.py")
 iconpath = os.path.join(dirpath, "res/splash-removebg-preview.ico")
 
 customtkinter_path = os.popen('pip show customtkinter').readlines()[7].split("Location: ")[1]
-cmd   = 'pyinstaller --noconfirm --onedir --windowed --icon="{0}" --add-data "{1}/customtkinter;customtkinter/"  "{2}" -n "QTSaver"'.format(iconpath, customtkinter_path.strip(), filepath.replace("\\","/"))
+cmd   = 'pyinstaller --noconfirm --onedir --windowed --exclude-module PyQt5 --exclude-module PyQt6 --exclude-module PySide2 --exclude-module PySide6 --icon="{0}" --add-data "{1}/customtkinter;customtkinter/"  "{2}" -n "QTSaver"'.format(iconpath, customtkinter_path.strip(), filepath.replace("\\","/"))
 output = os.popen(cmd).readlines()
 
 
