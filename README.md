@@ -23,6 +23,10 @@
 * **Details**
 </details>
 
+<details open>
+<summary>License</summary>
+</details>
+
 -----
 # Intro
 ## Description
@@ -74,3 +78,11 @@ On first launch, log in with your Instagram account (2FA/verification codes are 
 - **About** — app info and links.
 
 `config.ini` stores your output path and saved account list. Your Instagram session is cached in `session.json`, kept locally and never committed to the repo.
+
+# License
+
+Copyright (C) 2023-2026 MashiroW
+
+QTSaver is free software, released under the [GNU General Public License v3.0](LICENSE). You may use, modify and redistribute it, in whole or in part (snippets included), as long as anything you distribute that is based on it is also released under the GPL-3.0 with its source code, and keeps this copyright notice.
+
+**Commercial or closed-source use:** if you want to use this code, or any part of it, in a proprietary or closed-source product without the GPL obligations, you need a separate commercial license. Contact me on Discord to get one: https://discord.gg/P2td9N3eCn
