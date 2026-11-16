@@ -2,6 +2,6 @@ pyperclip
 requests
 customtkinter>=5.2
 Pillow
-instagrapi>=3
+instagrapi>=3.2.15
 keyring
 opencv-python
