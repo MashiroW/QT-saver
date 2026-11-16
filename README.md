@@ -51,7 +51,7 @@ Version | Status | Link |
 -----
 ## Project Setup
 
-This project is developed with `Python v3.10`.
+This project is developed with `Python v3.12` and requires `Python v3.11` or newer.
 
 ### Install the dependencies
 
