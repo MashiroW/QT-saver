@@ -45,7 +45,7 @@ If you are looking for the executables here's where you can get them
 
 Version | Status | Link |
 | ------------- | ------------- | ------------- |
-| QTSaver v3.0 | Supported | Coming soon |
+| QTSaver v3.0 | Supported | [v3.0.2](https://github.com/MashiroW/QT-saver/releases/tag/v3.0.2) |
 | QTSaver v2.0.1 (legacy, no-login) | Archived — no longer functional | [v2.0.1](https://github.com/MashiroW/QT-saver/releases/tag/v2.0.1) |
 
 -----
